@@ -1,0 +1,394 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Banker Algorithm by rahimi</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="bootstrap.min.css">
+    <script src="jquery.min.js"></script>
+    <script src="main.js"></script>
+    <style>
+	@font-face {
+    font-family: 'latoLight';
+    font-style: normal;
+    font-weight: 300;
+    src: local('Lato Light'), local('Lato-Light'), url(https://fonts.gstatic.com/s/lato/v11/EsvMC5un3kjyUhB9ZEPPwg.woff2) format('woff2');
+}
+        body {
+            direction: ltr;
+			font-family: latoLight;
+        }
+
+        table {
+            direction: ltr;
+        }
+
+        h3 {
+            font-family: latoLight;
+            border-bottom: 2px solid #6BB4D5;
+            padding: 5px 5px 0px 5px;
+        }
+
+        sub {
+            vertical-align: sub;
+            font-size: smaller;
+        }
+
+        td {
+            text-align: center;
+        }
+
+        input[type='text'] {
+            width: 20px;
+            text-align: center;
+        }
+
+        .table-p tr td:first-child {
+            width: 40px;
+            height: 30px;
+            background-color: #f9f9f9;
+            border-radius: 100px;
+            box-shadow: 0 0 2px 0 rgba(0,0,0,.4),0 6px 20px 0 rgba(0,0,0,0);
+        }
+		
+		button {
+		background-color: rgba(255,255,255,.4);
+		border: 2px solid #fff ;
+		color: #fff;
+		padding: 8px;
+		margin: 5px 5px;
+		}
+.gradient-purpink{
+    background: #7f00ff;
+    background: -webkit-linear-gradient(45deg, #7f00ff, #e100ff)!important;
+    background: linear-gradient(45deg, #7f00ff, #e100ff)!important;
+	color:#fff;padding:15px;
+}
+
+
+.gradient-blooker{
+    background: #ffdf40;
+    background: -webkit-linear-gradient(45deg, #ffdf40, #ff8359)!important;
+    background: linear-gradient(45deg, #ffdf40, #ff8359)!important;
+}
+
+.gradient-quepal{
+    background: #42e695;
+    background: -webkit-linear-gradient(45deg, #42e695, #3bb2b8)!important;
+    background: linear-gradient(45deg, #42e695, #3bb2b8)!important;
+}
+
+.gradient-purpink-deep{
+    background: #7f00ff;
+    background-image: -webkit-linear-gradient(330deg,#8e2de2,#4a00e0);
+    background-image: linear-gradient(120deg,#8e2de2,#4a00e0);
+}
+
+    </style>
+</head>
+
+<body>
+
+    <div class="text-center gradient-purpink" style="">
+        <h2>Banker Algorithm</h2>
+        <p style="font-family:Tahoma;">Avoid deadlock</p>
+    </div>
+
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-4 col-sm-4" style="margin:0;padding:0;">
+                <h3>Current allocation</h3>
+                <table class="table table-hover table-p">
+                    <th>
+                    <td>A</td>
+                    <td>B</td>
+                    <td>C</td>
+                    </th>
+                    <tr>
+                        <td style="width: 0%;">
+                            P
+                            <sub>0</sub>
+                        </td>
+                        <td>
+                            <input id="allocation_p0_1" type="text" value="0">
+                        </td>
+                        <td>
+                            <input id="allocation_p0_2" type="text" value="1">
+                        </td>
+                        <td>
+                            <input id="allocation_p0_3" type="text" value="0">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            P
+                            <sub>1</sub>
+                        </td>
+                        <td>
+                            <input id="allocation_p1_1" type="text" value="2">
+                        </td>
+                        <td>
+                            <input id="allocation_p1_2" type="text" value="0">
+                        </td>
+                        <td>
+                            <input id="allocation_p1_3" type="text" value="0">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            P
+                            <sub>2</sub>
+                        </td>
+                        <td>
+                            <input id="allocation_p2_1" type="text" value="3">
+                        </td>
+                        <td>
+                            <input id="allocation_p2_2" type="text" value="0">
+                        </td>
+                        <td>
+                            <input id="allocation_p2_3" type="text" value="2">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            P
+                            <sub>3</sub>
+                        </td>
+                        <td>
+                            <input id="allocation_p3_1" type="text" value="2">
+                        </td>
+                        <td>
+                            <input id="allocation_p3_2" type="text" value="1">
+                        </td>
+                        <td>
+                            <input id="allocation_p3_3" type="text" value="1">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            P
+                            <sub>4</sub>
+                        </td>
+                        <td>
+                            <input id="allocation_p4_1" type="text" value="0">
+                        </td>
+                        <td>
+                            <input id="allocation_p4_2" type="text" value="0">
+                        </td>
+                        <td>
+                            <input id="allocation_p4_3" type="text" value="2">
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <div class="col-lg-4 col-sm-4" style="margin:0;padding:0;">
+                <h3>Maximum demand</h3>
+                <table class="table table-hover  table-p">
+                    <th>
+                    <td>A</td>
+                    <td>B</td>
+                    <td>C</td>
+                    </th>
+                    <tr>
+                        <td>
+                            P<sub>0</sub>
+                        </td>
+                        <td>
+                            <input id="max_p0_1" type="text" value="7">
+                        </td>
+                        <td>
+                            <input id="max_p0_2" type="text" value="5">
+                        </td>
+                        <td>
+                            <input id="max_p0_3" type="text" value="3">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            P
+                            <sub>1</sub>
+                        </td>
+                        <td>
+                            <input id="max_p1_1" type="text" value="3">
+                        </td>
+                        <td>
+                            <input id="max_p1_2" type="text" value="2">
+                        </td>
+                        <td>
+                            <input id="max_p1_3" type="text" value="2">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            P
+                            <sub>2</sub>
+                        </td>
+                        <td>
+                            <input id="max_p2_1" type="text" value="9">
+                        </td>
+                        <td>
+                            <input id="max_p2_2" type="text" value="0">
+                        </td>
+                        <td>
+                            <input id="max_p2_3" type="text" value="2">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            P
+                            <sub>3</sub>
+                        </td>
+                        <td>
+                            <input id="max_p3_1" type="text" value="2">
+                        </td>
+                        <td>
+                            <input id="max_p3_2" type="text" value="2">
+                        </td>
+                        <td>
+                            <input id="max_p3_3" type="text" value="2">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            P
+                            <sub>4</sub>
+                        </td>
+                        <td>
+                            <input id="max_p4_1" type="text" value="4">
+                        </td>
+                        <td>
+                            <input id="max_p4_2" type="text" value="3">
+                        </td>
+                        <td>
+                            <input id="max_p4_3" type="text" value="3">
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <div class="col-lg-4 col-sm-4" style="margin:0;padding:0;">
+                <h3>The cost</h3>
+                <table class="table" style="background-color:khaki;border-radius:10px">
+                    <th>
+                    <td>A</td>
+                    <td>B</td>
+                    <td>C</td>
+                    </th>
+                    <tr>
+                        <td>
+                            P
+                            <sub>0</sub>
+                        </td>
+                        <td>
+                            <input id="need_p0_1" type="text" value="-">
+                        </td>
+                        <td>
+                            <input id="need_p0_2" type="text" value="-">
+                        </td>
+                        <td>
+                            <input id="need_p0_3" type="text" value="-">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            P
+                            <sub>1</sub>
+                        </td>
+                        <td>
+                            <input id="need_p1_1" type="text" value="-">
+                        </td>
+                        <td>
+                            <input id="need_p1_2" type="text" value="-">
+                        </td>
+                        <td>
+                            <input id="need_p1_3" type="text" value="-">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            P
+                            <sub>2</sub>
+                        </td>
+                        <td>
+                            <input id="need_p2_1" type="text" value="-">
+                        </td>
+                        <td>
+                            <input id="need_p2_2" type="text" value="-">
+                        </td>
+                        <td>
+                            <input id="need_p2_3" type="text" value="-">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            P
+                            <sub>3</sub>
+                        </td>
+                        <td>
+                            <input id="need_p3_1" type="text" value="-">
+                        </td>
+                        <td>
+                            <input id="need_p3_2" type="text" value="-">
+                        </td>
+                        <td>
+                            <input id="need_p3_3" type="text" value="-">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            P
+                            <sub>4</sub>
+                        </td>
+                        <td>
+                            <input id="need_p4_1" type="text" value="-">
+                        </td>
+                        <td>
+                            <input id="need_p4_2" type="text" value="-">
+                        </td>
+                        <td>
+                            <input id="need_p4_3" type="text" value="-">
+                        </td>
+                    </tr>
+                </table>
+            </div>
+
+
+
+
+        </div></div>
+		
+		<div class="row">
+		
+            <div class="col-lg-12  gradient-purpink" style="text-align:center;background-color:#f9f9f9;padding: 10px auto;margin: 20px 0;">
+                <button class=" gradient-purpink-deep" onclick="need()" style="font-family: Tahoma;">Calculate the cost</button>
+                <button class=" gradient-purpink-deep" onclick="clsTXT()" style="font-family: Tahoma;">Clear</button>
+            </div>
+
+            <div class="col-lg-12">
+                <h1 class="text-center  gradient-purpink" style="font-family: Tahoma">Calculate Available</h1>
+            </div>
+
+            <div class="col-lg-12 text-left rtl">
+                <h4>Avail(A) = <span id="avail_a">0</span></h4>
+                <h4>Avail(B) = <span id="avail_b">0</span></h4>
+                <h4>Avail(C) = <span id="avail_c">0</span></h4>
+            </div>
+
+            <div class="col-lg-12 text-center">
+                <h1 class="text-center  gradient-purpink" style="font-family: Tahoma">Process liberation</h1>
+                <button  class="gradient-blooker" onclick="banker()" style="border-radius:10px;font-family: Tahoma;">Run the algorithm</button>
+
+                <div id="result" class=" gradient-blooker" style="direction:ltr;;color:#fff;font-weight:bold;;font-size:20px;margin: 10px 0;padding:10px;">
+                    -------------
+                </div>
+            </div>
+		
+    </div>
+
+    <footer style="margin-top: 100px">
+
+    </footer>
+
+</body>
+
+</html>
